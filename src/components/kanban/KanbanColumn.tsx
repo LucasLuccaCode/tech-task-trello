@@ -18,20 +18,20 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   dragHandleProps 
 }) => {
   return (
-    <div className="min-w-80 bg-gray-900/30 backdrop-blur-sm rounded-lg border border-gray-800">
-      <div className="p-4 border-b border-gray-800">
+    <div className="min-w-72 sm:min-w-80 bg-gray-900/40 backdrop-blur-sm rounded-lg border border-gray-800 flex-shrink-0">
+      <div className="p-3 sm:p-4 border-b border-gray-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div 
-              className="w-3 h-3 rounded-full"
+              className="w-3 h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: column.color }}
             />
-            <h3 className="font-semibold text-white">{column.title}</h3>
-            <span className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full">
+            <h3 className="font-semibold text-white text-sm sm:text-base truncate">{column.title}</h3>
+            <span className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full flex-shrink-0">
               {column.tasks.length}
             </span>
           </div>
-          <div {...dragHandleProps} className="cursor-grab active:cursor-grabbing">
+          <div {...dragHandleProps} className="cursor-grab active:cursor-grabbing p-1 hidden sm:block">
             <GripVertical className="w-4 h-4 text-gray-500" />
           </div>
         </div>
@@ -42,7 +42,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`p-4 space-y-3 min-h-96 ${
+            className={`p-3 sm:p-4 space-y-3 min-h-64 sm:min-h-96 ${
               snapshot.isDraggingOver ? 'bg-gray-800/30' : ''
             }`}
           >
@@ -65,7 +65,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
             <Button
               onClick={() => onCreateTask(column.id)}
               variant="ghost"
-              className="w-full border-dashed border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300"
+              className="w-full border-dashed border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300 text-sm py-2 h-auto"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar tarefa

@@ -89,9 +89,9 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-gray-900 border-gray-800 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[90vw] max-w-lg mx-auto bg-gray-900/95 border-gray-800 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-white">
+          <DialogTitle className="text-white text-lg">
             {isEditing ? 'Editar Tarefa' : 'Nova Tarefa'}
           </DialogTitle>
         </DialogHeader>
@@ -118,12 +118,12 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Descreva a tarefa"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="bg-gray-800 border-gray-700 text-white resize-none"
               rows={3}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Prioridade
@@ -181,7 +181,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
                 type="button"
                 onClick={addTag}
                 size="sm"
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 px-3"
               >
                 <Plus className="w-4 h-4" />
               </Button>
@@ -208,14 +208,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
             )}
           </div>
 
-          <div className="flex justify-between pt-4">
+          <div className="flex flex-col sm:flex-row justify-between pt-4 gap-4">
             <div>
               {isEditing && (
                 <Button
                   type="button"
                   variant="destructive"
                   onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-700"
+                  className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Excluir
@@ -228,14 +228,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="border-gray-700 hover:bg-gray-800"
+                className="border-gray-700 hover:bg-gray-800 flex-1 sm:flex-none"
               >
                 Cancelar
               </Button>
               <Button
                 type="submit"
                 disabled={!title.trim()}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
               >
                 {isEditing ? 'Salvar' : 'Criar'}
               </Button>

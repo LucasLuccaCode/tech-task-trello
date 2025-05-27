@@ -35,15 +35,15 @@ export const ColumnModal: React.FC<ColumnModalProps> = ({ isOpen, onClose }) => 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-gray-900 border-gray-800 backdrop-blur-xl">
+      <DialogContent className="w-[90vw] max-w-md mx-auto bg-gray-900/95 border-gray-800 backdrop-blur-xl">
         <DialogHeader>
-          <DialogTitle className="text-white">Nova Coluna</DialogTitle>
+          <DialogTitle className="text-white text-lg">Novo Status</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Nome da Coluna
+              Nome do Status
             </label>
             <Input
               value={title}
@@ -56,15 +56,15 @@ export const ColumnModal: React.FC<ColumnModalProps> = ({ isOpen, onClose }) => 
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-3">
-              Cor da Coluna
+              Cor do Status
             </label>
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-5 gap-2">
               {STATUS_COLORS.map(color => (
                 <button
                   key={color.value}
                   type="button"
                   onClick={() => setSelectedColor(color.value)}
-                  className={`w-12 h-12 rounded-lg border-2 transition-all ${
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 transition-all touch-manipulation ${
                     selectedColor === color.value
                       ? 'border-white scale-110'
                       : 'border-gray-600 hover:border-gray-500'
@@ -90,7 +90,7 @@ export const ColumnModal: React.FC<ColumnModalProps> = ({ isOpen, onClose }) => 
               disabled={!title.trim()}
               className="bg-blue-600 hover:bg-blue-700"
             >
-              Criar Coluna
+              Criar Status
             </Button>
           </div>
         </form>
