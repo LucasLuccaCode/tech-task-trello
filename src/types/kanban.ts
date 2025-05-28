@@ -1,4 +1,3 @@
-
 export interface Task {
   id: string;
   title: string;
@@ -9,6 +8,7 @@ export interface Task {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  completed?: boolean; // Para To-Do items
 }
 
 export interface Column {
@@ -81,9 +81,7 @@ export const DEFAULT_PROJECT_TYPES: ProjectType[] = [
     icon: 'list-todo',
     color: '#22C55E',
     defaultColumns: [
-      { title: 'A Fazer', color: '#EF4444', order: 0 },
-      { title: 'Em Progresso', color: '#F59E0B', order: 1 },
-      { title: 'Concluído', color: '#10B981', order: 2 }
+      { title: 'Tarefas', color: '#10B981', order: 0 }
     ]
   }
 ];

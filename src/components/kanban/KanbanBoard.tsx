@@ -30,6 +30,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateTask, onCreate
 
     if (!destination) return;
 
+    // Se o item foi solto na mesma posição, não faz nada
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
     if (type === 'column') {
       const columnIds = currentProject.columns
         .sort((a, b) => a.order - b.order)
@@ -43,49 +51,77 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateTask, onCreate
       return;
     }
 
+    // Reordenação de tarefas
     if (source.droppableId === destination.droppableId) {
+      // Mesma coluna - reordenar
       reorderTask(result.draggableId, source.droppableId, destination.index);
     } else {
+      // Colunas diferentes - mover
       moveTask(result.draggableId, source.droppableId, destination.droppableId, destination.index);
     }
   };
 
+  const sortedColumns = currentProject.columns.sort((a, b) => a.order - b.order);
+
   return (
     <div className="flex-1 p-4 sm:p-6 overflow-hidden">
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="board" direction="horizontal" type="column">
-          {(provided) => (
+        <Droppable 
+          droppableId="board" 
+          direction="horizontal" 
+          type="column"
+          ignoreContainerClipping={true}
+        >
+          {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex space-x-4 sm:space-x-6 h-full overflow-x-auto pb-6"
+              className={`flex space-x-4 sm:space-x-6 h-full overflow-x-auto pb-6 ${
+                snapshot.isDraggingOver ? 'bg-blue-900/10' : ''
+              }`}
+              style={{
+                transition: 'background-color 0.2s ease',
+              }}
             >
-              {currentProject.columns
-                .sort((a, b) => a.order - b.order)
-                .map((column, index) => (
-                  <Draggable key={column.id} draggableId={column.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className={`${snapshot.isDragging ? 'opacity-50' : ''}`}
-                      >
-                        <KanbanColumn
-                          column={column}
-                          onCreateTask={onCreateTask}
-                          dragHandleProps={provided.dragHandleProps}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+              {sortedColumns.map((column, index) => (
+                <Draggable 
+                  key={column.id} 
+                  draggableId={column.id} 
+                  index={index}
+                  isDragDisabled={false}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      className={`${
+                        snapshot.isDragging 
+                          ? 'opacity-80 rotate-2 shadow-2xl' 
+                          : 'opacity-100'
+                      }`}
+                      style={{
+                        ...provided.draggableProps.style,
+                        transition: snapshot.isDragging 
+                          ? 'none' 
+                          : 'transform 0.2s ease, opacity 0.2s ease',
+                      }}
+                    >
+                      <KanbanColumn
+                        column={column}
+                        onCreateTask={onCreateTask}
+                        dragHandleProps={provided.dragHandleProps}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
               {provided.placeholder}
               
-              <div className="min-w-72 sm:min-w-80">
+              <div className="min-w-72 sm:min-w-80 flex-shrink-0">
                 <Button
                   onClick={onCreateColumn}
                   variant="outline"
-                  className="w-full h-12 border-dashed border-gray-600 hover:border-gray-500 bg-transparent"
+                  className="w-full h-12 border-dashed border-gray-600 hover:border-gray-500 bg-transparent hover:bg-gray-800/30 transition-all"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Status

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useKanban } from '@/contexts/KanbanContext';
 import { KanbanBoard } from './KanbanBoard';
+import { TodoView } from './TodoView';
 import { TaskModal } from './TaskModal';
 import { ColumnModal } from './ColumnModal';
 import { ProjectSettings } from './ProjectSettings';
@@ -19,6 +20,12 @@ export const KanbanView: React.FC = () => {
     return null;
   }
 
+  // Se for um projeto To-Do, mostrar a view específica
+  if (currentProject.type.id === 'todo') {
+    return <TodoView />;
+  }
+
+  // Caso contrário, mostrar o Kanban normal
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950 flex flex-col">

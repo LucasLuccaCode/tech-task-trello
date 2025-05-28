@@ -18,10 +18,10 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   dragHandleProps 
 }) => {
   return (
-    <div className="min-w-72 sm:min-w-80 bg-gray-900/40 backdrop-blur-sm rounded-lg border border-gray-800 flex-shrink-0">
+    <div className="min-w-72 sm:min-w-80 bg-gray-900/40 backdrop-blur-sm rounded-lg border border-gray-800 flex-shrink-0 shadow-lg">
       <div className="p-3 sm:p-4 border-b border-gray-800">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 flex-1 min-w-0">
             <div 
               className="w-3 h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: column.color }}
@@ -31,8 +31,11 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
               {column.tasks.length}
             </span>
           </div>
-          <div {...dragHandleProps} className="cursor-grab active:cursor-grabbing p-1 hidden sm:block">
-            <GripVertical className="w-4 h-4 text-gray-500" />
+          <div 
+            {...dragHandleProps} 
+            className="cursor-grab active:cursor-grabbing p-1 hidden sm:block hover:bg-gray-700/50 rounded transition-colors"
+          >
+            <GripVertical className="w-4 h-4 text-gray-500 hover:text-gray-400" />
           </div>
         </div>
       </div>
@@ -42,9 +45,15 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`p-3 sm:p-4 space-y-3 min-h-64 sm:min-h-96 ${
-              snapshot.isDraggingOver ? 'bg-gray-800/30' : ''
+            className={`p-3 sm:p-4 space-y-3 min-h-64 sm:min-h-96 transition-all duration-200 ${
+              snapshot.isDraggingOver 
+                ? 'bg-blue-900/20 border-blue-500/30' 
+                : ''
             }`}
+            style={{
+              borderWidth: snapshot.isDraggingOver ? '2px' : '0px',
+              borderStyle: 'dashed',
+            }}
           >
             {column.tasks.map((task, index) => (
               <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -53,7 +62,17 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={snapshot.isDragging ? 'opacity-50' : ''}
+                    className={`${
+                      snapshot.isDragging 
+                        ? 'opacity-90 rotate-1 shadow-xl scale-105' 
+                        : 'opacity-100'
+                    }`}
+                    style={{
+                      ...provided.draggableProps.style,
+                      transition: snapshot.isDragging 
+                        ? 'none' 
+                        : 'transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease',
+                    }}
                   >
                     <TaskCard task={task} />
                   </div>
@@ -65,7 +84,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
             <Button
               onClick={() => onCreateTask(column.id)}
               variant="ghost"
-              className="w-full border-dashed border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300 text-sm py-2 h-auto"
+              className="w-full border-dashed border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 text-sm py-2 h-auto transition-all"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar tarefa
