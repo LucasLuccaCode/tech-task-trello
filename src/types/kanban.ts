@@ -74,6 +74,17 @@ export const DEFAULT_PROJECT_TYPES: ProjectType[] = [
       { title: 'Pausado', color: '#EF4444', order: 2 },
       { title: 'Finalizado', color: '#10B981', order: 3 }
     ]
+  },
+  {
+    id: 'todo',
+    name: 'Lista de Tarefas',
+    icon: 'list-todo',
+    color: '#22C55E',
+    defaultColumns: [
+      { title: 'A Fazer', color: '#EF4444', order: 0 },
+      { title: 'Em Progresso', color: '#F59E0B', order: 1 },
+      { title: 'Concluído', color: '#10B981', order: 2 }
+    ]
   }
 ];
 

@@ -1,18 +1,23 @@
 
 import React from 'react';
-import { KanbanProvider } from '@/contexts/KanbanContext';
-import { KanbanHeader } from '@/components/kanban/KanbanHeader';
-import { KanbanBoard } from '@/components/kanban/KanbanBoard';
+import { KanbanProvider, useKanban } from '@/contexts/KanbanContext';
+import { ProjectsList } from '@/components/kanban/ProjectsList';
+import { KanbanView } from '@/components/kanban/KanbanView';
+
+const AppContent = () => {
+  const { currentView } = useKanban();
+
+  return (
+    <div className="min-h-screen overflow-x-hidden">
+      {currentView === 'projects' ? <ProjectsList /> : <KanbanView />}
+    </div>
+  );
+};
 
 const Index = () => {
   return (
     <KanbanProvider>
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950 flex flex-col overflow-x-hidden">
-        <KanbanHeader />
-        <div className="flex-1 overflow-hidden">
-          <KanbanBoard />
-        </div>
-      </div>
+      <AppContent />
     </KanbanProvider>
   );
 };

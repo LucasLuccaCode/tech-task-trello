@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Project, ProjectType, Task, Column, DEFAULT_PROJECT_TYPES } from '@/types/kanban';
 
@@ -6,10 +5,14 @@ interface KanbanContextType {
   projects: Project[];
   projectTypes: ProjectType[];
   currentProject: Project | null;
+  currentView: 'projects' | 'kanban';
+  searchTerm: string;
   createProject: (name: string, description: string, typeId: string) => void;
   updateProject: (projectId: string, updates: Partial<Project>) => void;
   deleteProject: (projectId: string) => void;
   setCurrentProject: (project: Project | null) => void;
+  setCurrentView: (view: 'projects' | 'kanban') => void;
+  setSearchTerm: (term: string) => void;
   createTask: (columnId: string, task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateTask: (taskId: string, updates: Partial<Task>) => void;
   deleteTask: (taskId: string) => void;
@@ -35,6 +38,8 @@ export const KanbanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectTypes] = useState<ProjectType[]>(DEFAULT_PROJECT_TYPES);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [currentView, setCurrentView] = useState<'projects' | 'kanban'>('projects');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -237,10 +242,14 @@ export const KanbanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       projects,
       projectTypes,
       currentProject,
+      currentView,
+      searchTerm,
       createProject,
       updateProject,
       deleteProject,
       setCurrentProject,
+      setCurrentView,
+      setSearchTerm,
       createTask,
       updateTask,
       deleteTask,
