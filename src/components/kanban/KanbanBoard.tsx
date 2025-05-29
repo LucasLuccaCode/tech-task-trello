@@ -76,12 +76,9 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateTask, onCreate
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className={`flex space-x-4 sm:space-x-6 h-full overflow-x-auto pb-6 ${
-                snapshot.isDraggingOver ? 'bg-blue-900/10' : ''
+              className={`flex space-x-4 sm:space-x-6 h-full overflow-x-auto pb-6 transition-all duration-300 ${
+                snapshot.isDraggingOver ? 'bg-blue-900/20 rounded-lg' : ''
               }`}
-              style={{
-                transition: 'background-color 0.2s ease',
-              }}
             >
               {sortedColumns.map((column, index) => (
                 <Draggable 
@@ -94,16 +91,17 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateTask, onCreate
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      className={`${
+                      className={`transition-all duration-200 ${
                         snapshot.isDragging 
-                          ? 'opacity-80 rotate-2 shadow-2xl' 
-                          : 'opacity-100'
+                          ? 'opacity-95 rotate-3 scale-105 shadow-2xl z-50' 
+                          : 'opacity-100 hover:scale-101'
                       }`}
                       style={{
                         ...provided.draggableProps.style,
-                        transition: snapshot.isDragging 
-                          ? 'none' 
-                          : 'transform 0.2s ease, opacity 0.2s ease',
+                        zIndex: snapshot.isDragging ? 9999 : 'auto',
+                        transform: snapshot.isDragging 
+                          ? `${provided.draggableProps.style?.transform} rotate(3deg)` 
+                          : provided.draggableProps.style?.transform,
                       }}
                     >
                       <KanbanColumn
@@ -121,7 +119,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateTask, onCreate
                 <Button
                   onClick={onCreateColumn}
                   variant="outline"
-                  className="w-full h-12 border-dashed border-gray-600 hover:border-gray-500 bg-transparent hover:bg-gray-800/30 transition-all"
+                  className="w-full h-12 border-dashed border-gray-600 hover:border-gray-500 bg-transparent hover:bg-gray-800/30 transition-all duration-200 hover:scale-105"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Status

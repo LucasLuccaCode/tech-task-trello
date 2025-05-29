@@ -18,24 +18,24 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   dragHandleProps 
 }) => {
   return (
-    <div className="min-w-72 sm:min-w-80 bg-gray-900/40 backdrop-blur-sm rounded-lg border border-gray-800 flex-shrink-0 shadow-lg">
+    <div className="min-w-72 sm:min-w-80 bg-gray-900/40 backdrop-blur-sm rounded-lg border border-gray-800 flex-shrink-0 shadow-lg hover:shadow-xl transition-all duration-200">
       <div className="p-3 sm:p-4 border-b border-gray-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 flex-1 min-w-0">
             <div 
-              className="w-3 h-3 rounded-full flex-shrink-0"
+              className="w-3 h-3 rounded-full flex-shrink-0 shadow-sm"
               style={{ backgroundColor: column.color }}
             />
             <h3 className="font-semibold text-white text-sm sm:text-base truncate">{column.title}</h3>
-            <span className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full flex-shrink-0">
+            <span className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full flex-shrink-0 transition-colors">
               {column.tasks.length}
             </span>
           </div>
           <div 
             {...dragHandleProps} 
-            className="cursor-grab active:cursor-grabbing p-1 hidden sm:block hover:bg-gray-700/50 rounded transition-colors"
+            className="cursor-grab active:cursor-grabbing p-1 hidden sm:block hover:bg-gray-700/50 rounded transition-all duration-200 hover:scale-110"
           >
-            <GripVertical className="w-4 h-4 text-gray-500 hover:text-gray-400" />
+            <GripVertical className="w-4 h-4 text-gray-500 hover:text-gray-400 transition-colors" />
           </div>
         </div>
       </div>
@@ -45,15 +45,11 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`p-3 sm:p-4 space-y-3 min-h-64 sm:min-h-96 transition-all duration-200 ${
+            className={`p-3 sm:p-4 space-y-3 min-h-64 sm:min-h-96 transition-all duration-300 ${
               snapshot.isDraggingOver 
-                ? 'bg-blue-900/20 border-blue-500/30' 
-                : ''
+                ? 'bg-blue-900/30 border-2 border-dashed border-blue-400/50 rounded-b-lg' 
+                : 'border-2 border-transparent'
             }`}
-            style={{
-              borderWidth: snapshot.isDraggingOver ? '2px' : '0px',
-              borderStyle: 'dashed',
-            }}
           >
             {column.tasks.map((task, index) => (
               <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -62,16 +58,17 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`${
+                    className={`transition-all duration-200 ${
                       snapshot.isDragging 
-                        ? 'opacity-90 rotate-1 shadow-xl scale-105' 
-                        : 'opacity-100'
+                        ? 'opacity-100 rotate-2 scale-110 shadow-2xl cursor-grabbing' 
+                        : 'opacity-100 hover:scale-102 hover:shadow-lg cursor-grab'
                     }`}
                     style={{
                       ...provided.draggableProps.style,
-                      transition: snapshot.isDragging 
-                        ? 'none' 
-                        : 'transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease',
+                      zIndex: snapshot.isDragging ? 9999 : 'auto',
+                      transform: snapshot.isDragging 
+                        ? `${provided.draggableProps.style?.transform} rotate(2deg)` 
+                        : provided.draggableProps.style?.transform,
                     }}
                   >
                     <TaskCard task={task} />
@@ -84,7 +81,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
             <Button
               onClick={() => onCreateTask(column.id)}
               variant="ghost"
-              className="w-full border-dashed border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 text-sm py-2 h-auto transition-all"
+              className="w-full border-dashed border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 text-sm py-2 h-auto transition-all duration-200 hover:scale-105"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar tarefa
