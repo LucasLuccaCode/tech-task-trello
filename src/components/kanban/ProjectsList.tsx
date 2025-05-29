@@ -23,6 +23,7 @@ export const ProjectsList: React.FC = () => {
   const [showTodoModal, setShowTodoModal] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState('projetos');
 
   const kanbanProjects = projects.filter(p => p.type.id !== 'todo');
   const todoProjects = projects.filter(p => p.type.id === 'todo');
@@ -49,10 +50,10 @@ export const ProjectsList: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950 relative">
         <div className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800 p-4">
-          <Tabs defaultValue="projetos" className="w-full">
-            <div className="flex items-center justify-between mb-4">
+          <Tabs defaultValue="projetos" className="w-full" onValueChange={setActiveTab}>
+            <div className="flex items-center justify-center mb-4">
               <TabsList className="bg-gray-800/50 border border-gray-700">
                 <TabsTrigger 
                   value="projetos" 
@@ -69,25 +70,6 @@ export const ProjectsList: React.FC = () => {
                   To-Do
                 </TabsTrigger>
               </TabsList>
-
-              <div className="flex space-x-2">
-                <Button
-                  onClick={() => setShowProjectModal(true)}
-                  className="bg-blue-600 hover:bg-blue-700"
-                  size="sm"
-                >
-                  <Plus className="w-4 h-4 mr-1" />
-                  <span className="hidden sm:inline">Novo Projeto</span>
-                </Button>
-                <Button
-                  onClick={() => setShowTodoModal(true)}
-                  className="bg-green-600 hover:bg-green-700"
-                  size="sm"
-                >
-                  <Plus className="w-4 h-4 mr-1" />
-                  <span className="hidden sm:inline">Nova Lista</span>
-                </Button>
-              </div>
             </div>
 
             <div className="relative mb-6">
@@ -110,18 +92,9 @@ export const ProjectsList: React.FC = () => {
                   <p className="text-gray-500 mb-4">
                     {searchTerm ? 'Tente buscar com outros termos' : 'Crie seu primeiro projeto para começar'}
                   </p>
-                  {!searchTerm && (
-                    <Button
-                      onClick={() => setShowProjectModal(true)}
-                      className="bg-blue-600 hover:bg-blue-700"
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Criar Projeto
-                    </Button>
-                  )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-20">
                   {filteredKanbanProjects.map(project => (
                     <ProjectCard
                       key={project.id}
@@ -144,18 +117,9 @@ export const ProjectsList: React.FC = () => {
                   <p className="text-gray-500 mb-4">
                     {searchTerm ? 'Tente buscar com outros termos' : 'Crie sua primeira lista de tarefas'}
                   </p>
-                  {!searchTerm && (
-                    <Button
-                      onClick={() => setShowTodoModal(true)}
-                      className="bg-green-600 hover:bg-green-700"
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Criar Lista
-                    </Button>
-                  )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-20">
                   {filteredTodoProjects.map(project => (
                     <ProjectCard
                       key={project.id}
@@ -168,6 +132,27 @@ export const ProjectsList: React.FC = () => {
               )}
             </TabsContent>
           </Tabs>
+        </div>
+
+        {/* Floating Action Buttons */}
+        <div className="fixed bottom-6 right-6 z-50">
+          {activeTab === 'projetos' ? (
+            <Button
+              onClick={() => setShowProjectModal(true)}
+              className="bg-blue-600 hover:bg-blue-700 shadow-lg h-14 w-14 rounded-full"
+              size="icon"
+            >
+              <Plus className="w-6 h-6" />
+            </Button>
+          ) : (
+            <Button
+              onClick={() => setShowTodoModal(true)}
+              className="bg-green-600 hover:bg-green-700 shadow-lg h-14 w-14 rounded-full"
+              size="icon"
+            >
+              <Plus className="w-6 h-6" />
+            </Button>
+          )}
         </div>
       </div>
 

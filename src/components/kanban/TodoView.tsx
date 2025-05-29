@@ -4,13 +4,13 @@ import { useKanban } from '@/contexts/KanbanContext';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
-import { TaskModal } from './TaskModal';
+import { ArrowLeft, Plus, Trash2, Settings } from 'lucide-react';
+import { ProjectSettings } from './ProjectSettings';
 
 export const TodoView: React.FC = () => {
-  const { currentProject, setCurrentView, updateTask, deleteTask } = useKanban();
-  const [showTaskModal, setShowTaskModal] = useState(false);
+  const { currentProject, setCurrentView, updateTask, deleteTask, createTask } = useKanban();
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [showSettings, setShowSettings] = useState(false);
 
   if (!currentProject || currentProject.type.id !== 'todo') {
     return null;
@@ -23,8 +23,15 @@ export const TodoView: React.FC = () => {
   };
 
   const handleAddQuickTask = () => {
-    if (newTaskTitle.trim()) {
-      setShowTaskModal(true);
+    if (newTaskTitle.trim() && currentProject.columns[0]) {
+      createTask(currentProject.columns[0].id, {
+        title: newTaskTitle.trim(),
+        description: '',
+        priority: 'medium',
+        tags: [],
+        completed: false
+      });
+      setNewTaskTitle('');
     }
   };
 
@@ -44,6 +51,15 @@ export const TodoView: React.FC = () => {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSettings(true)}
+              className="border-gray-700 hover:bg-gray-800"
+            >
+              <Settings className="w-4 h-4" />
             </Button>
           </div>
 
@@ -161,14 +177,10 @@ export const TodoView: React.FC = () => {
         </div>
       </div>
 
-      <TaskModal
-        isOpen={showTaskModal}
-        onClose={() => {
-          setShowTaskModal(false);
-          setNewTaskTitle('');
-        }}
-        columnId={currentProject.columns[0]?.id || ''}
-        initialTitle={newTaskTitle}
+      <ProjectSettings
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        project={currentProject}
       />
     </>
   );
