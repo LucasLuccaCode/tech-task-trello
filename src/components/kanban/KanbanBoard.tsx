@@ -1,9 +1,8 @@
+
 import React from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { useKanban } from '@/contexts/KanbanContext';
 import { KanbanColumn } from './KanbanColumn';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 
 interface KanbanBoardProps {
   onCreateColumn: () => void;
@@ -28,7 +27,6 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateColumn }) => {
 
     if (!destination) return;
 
-    // Se o item foi solto na mesma posição, não faz nada
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -49,12 +47,9 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateColumn }) => {
       return;
     }
 
-    // Reordenação de tarefas
     if (source.droppableId === destination.droppableId) {
-      // Mesma coluna - reordenar
       reorderTask(result.draggableId, source.droppableId, destination.index);
     } else {
-      // Colunas diferentes - mover
       moveTask(result.draggableId, source.droppableId, destination.droppableId, destination.index);
     }
   };
@@ -89,16 +84,16 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateColumn }) => {
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      className={`transition-all duration-200 ${
+                      className={`transition-all duration-300 ${
                         snapshot.isDragging 
-                          ? 'opacity-95 rotate-3 scale-105 shadow-2xl z-[9999]' 
-                          : 'opacity-100 hover:scale-101'
+                          ? 'opacity-95 rotate-6 scale-110 shadow-2xl z-[9999] cursor-grabbing' 
+                          : 'opacity-100 hover:scale-[1.02] hover:shadow-lg'
                       }`}
                       style={{
                         ...provided.draggableProps.style,
                         zIndex: snapshot.isDragging ? 9999 : 'auto',
                         transform: snapshot.isDragging 
-                          ? `${provided.draggableProps.style?.transform} rotate(3deg)` 
+                          ? `${provided.draggableProps.style?.transform} rotate(6deg) scale(1.05)` 
                           : provided.draggableProps.style?.transform,
                       }}
                     >
@@ -111,17 +106,6 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onCreateColumn }) => {
                 </Draggable>
               ))}
               {provided.placeholder}
-              
-              <div className="min-w-72 sm:min-w-80 flex-shrink-0">
-                <Button
-                  onClick={onCreateColumn}
-                  variant="outline"
-                  className="w-full h-12 border-dashed border-white/30 hover:border-white/50 bg-transparent hover:bg-white/10 text-white/70 hover:text-white transition-all duration-200 hover:scale-105"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Adicionar Status
-                </Button>
-              </div>
             </div>
           )}
         </Droppable>

@@ -17,7 +17,7 @@ interface TaskModalProps {
 }
 
 export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId, task }) => {
-  const { createTask, updateTask, deleteTask } = useKanban();
+  const { createTask, updateTask, deleteTask, currentProject } = useKanban();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
@@ -25,6 +25,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
   const [dueDate, setDueDate] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
+  const [selectedColumnId, setSelectedColumnId] = useState(columnId || '');
 
   const isEditing = !!task;
 
@@ -44,12 +45,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
       setDueDate('');
       setTags([]);
     }
+    setSelectedColumnId(columnId || '');
     setNewTag('');
-  }, [task, isOpen]);
+  }, [task, isOpen, columnId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || !selectedColumnId) return;
 
     const taskData = {
       title: title.trim(),
@@ -62,8 +64,8 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
 
     if (isEditing && task) {
       updateTask(task.id, taskData);
-    } else if (columnId) {
-      createTask(columnId, taskData);
+    } else {
+      createTask(selectedColumnId, taskData);
     }
 
     onClose();
@@ -87,6 +89,8 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
+  const sortedColumns = currentProject?.columns.sort((a, b) => a.order - b.order) || [];
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[90vw] max-w-lg mx-auto bg-gray-900/95 border-gray-800 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
@@ -109,6 +113,26 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
               required
             />
           </div>
+
+          {!isEditing && (
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Coluna
+              </label>
+              <Select value={selectedColumnId} onValueChange={setSelectedColumnId}>
+                <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
+                  <SelectValue placeholder="Selecione uma coluna" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 border-gray-700">
+                  {sortedColumns.map((column) => (
+                    <SelectItem key={column.id} value={column.id}>
+                      {column.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -234,7 +258,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId,
               </Button>
               <Button
                 type="submit"
-                disabled={!title.trim()}
+                disabled={!title.trim() || (!isEditing && !selectedColumnId)}
                 className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
               >
                 {isEditing ? 'Salvar' : 'Criar'}

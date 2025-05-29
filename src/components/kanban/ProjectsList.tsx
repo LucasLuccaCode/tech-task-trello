@@ -50,10 +50,10 @@ export const ProjectsList: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-800 relative">
+      <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-slate-800 relative">
         <div className="bg-black/20 backdrop-blur-xl border-b border-white/10 p-4">
           <div className="text-center mb-6">
-            <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-3">
+            <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent mb-3">
               Kanban Manager
             </h1>
             <p className="text-white/70 text-lg">
@@ -148,7 +148,7 @@ export const ProjectsList: React.FC = () => {
           {activeTab === 'projetos' ? (
             <Button
               onClick={() => setShowProjectModal(true)}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl h-14 w-14 rounded-full transition-all duration-300 hover:scale-110"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-2xl h-14 w-14 rounded-full transition-all duration-300 hover:scale-110"
               size="icon"
             >
               <Plus className="w-6 h-6" />
@@ -156,7 +156,7 @@ export const ProjectsList: React.FC = () => {
           ) : (
             <Button
               onClick={() => setShowTodoModal(true)}
-              className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 shadow-2xl h-14 w-14 rounded-full transition-all duration-300 hover:scale-110"
+              className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 shadow-2xl h-14 w-14 rounded-full transition-all duration-300 hover:scale-110"
               size="icon"
             >
               <Plus className="w-6 h-6" />
